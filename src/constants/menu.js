@@ -7,7 +7,7 @@ import {
     BarChart,
     Settings,
     Archive,
-    Logout,
+    LogOut,
     Clipboard
 } from 'react-feather';
 
@@ -25,7 +25,7 @@ export const MENUITEMS = [
         ]
     },
     {
-        title: "{Products}", icon: Box, type: "sub", active: false, Children: [
+        title: "Products", icon: Box, type: "sub", active: false, Children: [
             {
                 title: "Physical", type: "sub", Children: [
                     { path: "products/physical/product-list", title: "Product List", type: "link", },
