@@ -29,7 +29,7 @@ export const MENUITEMS = [
             {
                 title: "Physical", type: "sub", Children: [
                     { path: "products/physical/product-list", title: "Product List", type: "link", },
-                    { path: "products/physical/product-list", title: "Category", type: "link", },
+                    { path: "products/physical/add-product", title: "Add Product", type: "link", },
                 ]
             },
 
