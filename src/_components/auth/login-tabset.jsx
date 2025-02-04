@@ -4,33 +4,15 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import { Unlock, User } from 'react-feather';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { userService } from '../../_services/auth/auth.service';
 import {connect} from 'react-redux';
 import { changeLoggedIn } from '../../_actions/user.actions';
+import withNavigate from '../../_helpers/withNavigate';
 
  class LoginTabset extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            tabIndex: 0,
-
-            username: "",
-            password: "",
-            loginSubmitted: false,
-
-            user:{
-                firstName : "",
-                lastName: "",
-                email: "",
-                userTypeId: 1,
-                password: "",
-                confirmPassword: "",
-            },
-            regSubmitted: false,
-
-            validationLogin : this.validatorLogin.valid(),
-            validationReg :this.validatorReg.valid(),
-
-        }
+       
         this.validatorLogin = new FormValidator([
             {
                 field : "userName",
@@ -100,7 +82,29 @@ import { changeLoggedIn } from '../../_actions/user.actions';
                 validWhen : true,
                 message : "password & confirm password must be same"
             }
-        ])
+        ]);
+
+        this.state = {
+            tabIndex: 0,
+
+            username: "",
+            password: "",
+            loginSubmitted: false,
+
+            user:{
+                firstName : "",
+                lastName: "",
+                email: "",
+                userTypeId: 1,
+                password: "",
+                confirmPassword: "",
+            },
+            regSubmitted: false,
+
+            validationLogin : this.validatorLogin.valid(),
+            validationReg :this.validatorReg.valid(),
+
+        }
     this.handleLogin = this.handleLogin.bind(this);
     this.handleReg = this.handleReg.bind(this)
     }
@@ -157,6 +161,26 @@ this.setState({
 const {userName, password} = this.state;
 if(validation.isValid){
     // login code
+    userService.login(userName,password)
+    .then(
+        res =>{
+if(res.isSuccess){
+localStorage.setItem("userDetails",JSON.stringify(res.data));
+this.props.setLoggedIn(true, res.data);
+this.clearLoginForm();
+this.props.navigate("/dashboard")
+}else{
+    toast.error("Invalid credentials", "Login");
+    localStorage.clear();
+    this.clearLoginForm();
+}
+        },
+        (error) =>{
+            toast.error("Invalid credentials", "Login");
+            localStorage.clear();
+            this.clearLoginForm();
+        }
+    )
 }
  }
  handleReg (e){
@@ -169,10 +193,32 @@ this.setState({
 const {user} = this.state;
 if(validation.isValid){
     // reg code
+    userService.register(user)
+    .then( res => {
+        if(res.isSuccess){
+            if(res.data == -1){
+                toast.warning("EmailId already exists, registration ");
+            }
+            else{
+                toast.success("Registration complete! , registration");
+                this.clearRegForm();
+                this.setState({
+                    tabIndex: 0
+                });
+            }
+         
+        }else{
+            toast.error(res.errors[0],"registration")
+        }
+    },
+    (error) =>{
+        toast.error("Something went wrong with registration")
+    }
+)
 }
      }
     render() {
-        const {userName, password,loginSubmitted,validationLogin, user,validationReg} = this.state;
+        const {userName, password,loginSubmitted,validationLogin, user,validationReg,regSubmitted} = this.state;
         let _validatorReg = regSubmitted ? this.validatorReg.validate(this.state, 'user') : validationReg;
         let _validatorLogin = regSubmitted ? this._validatorLogin.validate(this.state, ) : validationLogin;
         
@@ -188,27 +234,27 @@ if(validation.isValid){
                                     <input name="userName"
                                         type="email"
                                         placeholder="Username"
-                                        className={"form-control " + (_validatorLogin.userName.isInvalid ? "has-error" : "")}
+                                       // className={"form-control " + (_validatorLogin.userName.isInvalid ? "has-error" : "")}
                                         value={userName}
                                         onChange={this.handleLoginInput}
                                     />
-                                    {
+                                    {/* {
                                         _validatorLogin.userName.isInvalid &&
                                         <div className='help-block' >{_validatorLogin.userName.message}</div>
-                                    }
+                                    } */}
                                 </div>
                                 <div className='form-group'>
                                     <input name="password"
                                         type="password"
                                         placeholder="Password"
-                                        className={"form-control " + (_validatorLogin.password.isInvalid ? "has-error" : "")}
+                                        // className={"form-control " + (_validatorLogin.password.isInvalid ? "has-error" : "")}
                                         value={password}
                                         onChange={this.handleLoginInput}
                                     />
-                                    {
+                                    {/* {
                                         _validatorLogin.password.isInvalid &&
                                         <div className='help-block' >{_validatorLogin.password.message}</div>
-                                    }
+                                    } */}
                                 </div>
                                 <div className="form-button">
                                     <button className="btn btn-primary" type="submit" >Login</button>
@@ -221,68 +267,68 @@ if(validation.isValid){
                                     <input name="firstName"
                                         type="text"
                                         placeholder="First Name"
-                                        className={"form-control " + (_validatorReg.firstName.isInvalid ? "has-error" : "")}
+                                        // className={"form-control " + (_validatorReg.firstName.isInvalid ? "has-error" : "")}
                                         value={user.firstName}
                                         onChange={this.handleRegInput}
                                     />
-                                    {
+                                    {/* {
                                         _validatorReg.firstName.isInvalid &&
                                         <div className='help-block' >{_validatorReg.firstName.message}</div>
-                                    }
+                                    } */}
                                 </div>
                                 <div className="form-group">
                                     <input name="lastName"
                                         type="text"
                                         placeholder="Last Name"
-                                        className={"form-control " + (_validatorReg.lastName.isInvalid ? "has-error" : "")}
+                                        // className={"form-control " + (_validatorReg.lastName.isInvalid ? "has-error" : "")}
                                         value={user.lastName}
                                         onChange={this.handleRegInput}
                                     />
-                                    {
+                                    {/* {
                                         _validatorReg.lastName.isInvalid &&
                                         <div className='help-block' >{_validatorReg.lastName.message}</div>
-                                    }
+                                    } */}
                                 </div>
                                 <div className="form-group">
                                     <input name="email"
                                         type="email"
                                         placeholder="Email"
-                                        className={"form-control " + (_validatorReg.email.isInvalid ? "has-error" : "")}
+                                        // className={"form-control " + (_validatorReg.email.isInvalid ? "has-error" : "")}
                                         value={user.email}
                                         onChange={this.handleRegInput}
                                     />
-                                    {
+                                    {/* {
                                         _validatorReg.email.isInvalid &&
                                         <div className='help-block' >{_validatorReg.email.message}</div>
-                                    }
+                                    } */}
                                 </div>
                                 <div className="form-group">
                                     <input
                                         name="password"
                                         type="password"
                                         placeholder="Password"
-                                        className={"form-control " + (_validatorReg.password.isInvalid ? "has-error" : "")}
+                                        // className={"form-control " + (_validatorReg.password.isInvalid ? "has-error" : "")}
                                         value={user.password}
                                         onChange={this.handleRegInput}
                                     />
-                                    {
+                                    {/* {
                                         _validatorReg.password.isInvalid &&
                                         <div className='help-block' >{_validatorReg.password.message}</div>
-                                    }
+                                    } */}
                                 </div>
                                 <div className="form-group">
                                     <input
                                         name="confirmPassword"
                                         type="password"
                                         placeholder="Confirm Password"
-                                        className={"form-control " + (_validatorReg.confirmPassword.isInvalid ? "has-error" : "")}
+                                        // className={"form-control " + (_validatorReg.confirmPassword.isInvalid ? "has-error" : "")}
                                         value={user.confirmPassword}
                                         onChange={this.handleRegInput}
                                     />
-                                    {
+                                    {/* {
                                         _validatorReg.confirmPassword.isInvalid &&
                                         <div className='help-block' >{_validatorReg.confirmPassword.message}</div>
-                                    }
+                                    } */}
                                 </div>
                                 <div className="form-button">
                                     <button className="btn btn-primary" type="submit">Register</button>
@@ -297,11 +343,17 @@ if(validation.isValid){
     }
 }
 
-const MapStoreToProps = () =>{
-
+const MapStoreToProps = (state) =>{
+return ({
+    user : state.user
+})
 }
 
-const MapDispatchToProps = () =>{
-
+const MapDispatchToProps = (dispatch) =>{
+return ({
+    setLoggedIn : (isLoggedIn,user) =>{
+       dispatch(changeLoggedIn(isLoggedIn,user))
+    }
+})
 }
-export default connect(MapStoreToProps, MapDispatchToProps(LoginTabset)) 
+export default connect(MapStoreToProps, MapDispatchToProps)((LoginTabset)) 

@@ -3,8 +3,7 @@ import { BrowserRouter as Router,Routes,Route} from 'react-router-dom'
 import Layout from './_components/layout'
 import Login from './_components/auth/login'
 import { PrivateRoute } from './_privateRoute/privateRoute'
-
-import Dashboard from './_components/dashboard'
+import Dashboard from './_components/dashboard/dashboard'
 function App() {
 
   return (
