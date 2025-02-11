@@ -101,6 +101,7 @@ import withNavigate from '../../_helpers/withNavigate';
         }
     this.handleLogin = this.handleLogin.bind(this);
     this.handleReg = this.handleReg.bind(this);
+    this.logout();
     }
     tabChange(index) {
         this.setState({
@@ -109,6 +110,10 @@ import withNavigate from '../../_helpers/withNavigate';
     }
     passwordMatch = (confirmPass, state) =>{
 return state.user.password === confirmPass
+    }
+    logout = () =>{
+        localStorage.clear();
+        this.props.setLoggedIn(false, {});
     }
  handleLoginInput =(e) =>{
 e.preventDefault();
