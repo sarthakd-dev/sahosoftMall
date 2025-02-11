@@ -13,7 +13,7 @@ function App() {
       <Route path='/' element={<Login />} />
       <Route path='/auth/login' element={<Login />} />
 
-      <Route path='/' element={PrivateRoute} >
+      <Route path='/' element={< PrivateRoute />} >
       <Route path='/dashboard' element={<Dashboard />} />
       </Route>
       <Route path='*' element={<Login />} />

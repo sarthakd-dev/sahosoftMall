@@ -5,6 +5,7 @@ export const userService = {
 }
 
 async function login(userName,password){
+    debugger
 const requestOption = {
     method: "POST",
     headers :{'content-Type' : 'application/json'},
@@ -27,10 +28,11 @@ async function register(model){
 
 function handleResponse(response){
 return response.text().then(txt =>{
-const data = JSON.stringify(txt);
-if(response.ok){
+const data = JSON.parse(txt);
+if(!response.ok){
     const error = (data && data.message) || response.statusText ;
 return Promise.reject(error);
 }
+return data;
 })
 }

@@ -1,11 +1,13 @@
 import validator from 'validator';
 
 class FormValidator {
+    debugger
     constructor(validations) {
         this.validations = validations;
     }
 
     validate(state, col) {
+        debugger
         let validation = this.valid();
         this.validations.forEach(rule => {
 
@@ -30,9 +32,10 @@ class FormValidator {
     }
 
     valid() {
+        this.debugger
         const validation = {};
 
-        this.validations.map(rule => (
+        this.validations.forEach(rule => (
             validation[rule.field] = { isInvalid: false, message: '' }
         ));
 
