@@ -3,7 +3,7 @@ import userImg from '../../../assets/images/user.png'
 import { User, LogOut } from 'react-feather'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-// import Global from '../../../_helpers/basePath'
+import Global from '../../../_helpers/basePath'
 
 class UserMenu extends Component {
     render() {
@@ -20,7 +20,7 @@ class UserMenu extends Component {
                                         ? Global.BASE_USER_IMAGES_PATH + this.props.user.userDetails.imagePath : userImg} /> */}
                                         <img className="align-self-center pull-right img-50 rounded-circle blur-up lazyloaded"
                                         alt="header-user" 
-                                        src={userImg} />                                    <div className="dotted-animation">
+                                        src={(this.props.user.userDetails.imagePath !=null && this.props.user.userDetails.imagePath !="")? Global.BASE_IMAGES_PATH + this.props.user.userDetails.imagePath : userImg} />                                    <div className="dotted-animation">
                                         <span className="animatecircle"></span>
                                         <span className="main-circle"></span></div>
                                 </div>
@@ -44,5 +44,5 @@ const MapStateToProps = (state) => {
     }
 }
 
-// export default connect(MapStateToProps)(UserMenu)
-export default UserMenu;
+export default connect(MapStateToProps)(UserMenu)
+// export default UserMenu;
