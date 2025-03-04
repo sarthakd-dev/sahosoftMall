@@ -4,6 +4,7 @@ import Layout from './_components/layout'
 import Login from './_components/auth/login'
 import { PrivateRoute } from './_privateRoute/privateRoute'
 import Dashboard from './_components/dashboard/dashboard'
+import Size from './_components/masters/size'
 function App() {
 
   return (
@@ -15,6 +16,7 @@ function App() {
 
       <Route path='/' element={< PrivateRoute />} >
       <Route path='/dashboard' element={<Dashboard />} />
+      <Route path='/masters/size' element={<Size />} />
       </Route>
       <Route path='*' element={<Login />} />
     </Routes>

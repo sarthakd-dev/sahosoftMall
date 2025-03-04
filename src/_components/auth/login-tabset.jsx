@@ -4,7 +4,7 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import { Unlock, User } from 'react-feather';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { userService } from '../../_services/auth/auth.service';
+import { commonService } from '../../_services/common.service';
 import {connect} from 'react-redux';
 import { changeLoggedIn } from '../../_actions/user.actions';
 import withNavigate from '../../_helpers/withNavigate';
@@ -165,7 +165,7 @@ if(validation.isValid){
     debugger
     
     // login code
-    userService.login(userName,password)
+    commonService.login(userName,password)
     .then(
         res =>{
 if(res.isSuccess){
@@ -198,7 +198,7 @@ this.setState({
 const {user} = this.state;
 if(validation.isValid){
     // reg code
-    userService.register(user)
+    commonService.register(user)
     .then( res => {
         if(res.isSuccess){
             if(res.data == -1){
